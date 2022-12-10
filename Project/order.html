@@ -1,0 +1,139 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <title>Order Page</title>
+        <meta name="description" content="This is the description">
+        <link rel="stylesheet" href="styles.css">
+</head>
+<body>
+    <header class="main-header">
+
+        <nav class="main-nav nav">
+            <ul>
+                <li><a href="index.html">HOME</a></li>
+                <li><a href="store.html">STORE</a></li>
+                <li><a href="about.html">ABOUT</a></li>
+            </ul> 
+        </nav>
+        <h1 class="band-name band-name-large">The Generics</h1>
+    </header>
+    <p style="font-size:50px;;font-weight: bold;display: flexbox;margin-left: 630px;">Thank You</p>
+    <div class="order-container" >
+
+            <h2 class="order-container" style="font-size:40px;margin-left:650px">Your Orders</h2>
+            <div class="cart-row">
+                <span class="cart-item cart-header cart-column">ITEM</span>
+                <span class="cart-price cart-header cart-column">PRICE</span>
+                <span class="cart-quantity cart-header cart-column">QUANTITY</span>
+            </div>
+            <div class="cart-items"></div>
+
+    </div>
+
+    <footer class="main-footer">
+        <div class="container main-footer-container">
+            <h3 class="band-name">The Generics</h3>
+            <ul class="nav footer-nav">
+                <li>
+                    <a href="https://www.youtube.com" target="_blank">
+                        <img src="https://prasadyash2411.github.io/ecom-website/img/6260efc8fc9a9002669d2f4ad9956cc0.jpg">
+                    </a>
+                </li>
+                <li>
+                    <a href="https://www.spotify.com" target="_blank">
+                        <img src="https://prasadyash2411.github.io/ecom-website/img/Spotify%20Logo.png">
+                    </a>
+                </li>
+                <li>
+                    <a href="https://www.facebook.com" target="_blank">
+                        <img src="https://prasadyash2411.github.io/ecom-website/img/Facebook%20Logo.png">
+                    </a>
+                </li>
+            </ul>
+
+        </div>
+    </footer>
+    <script src="https://cdnjs.cloudflare.com/ajax/libs/axios/1.1.2/axios.min.js"></script>
+    <script>
+        document.addEventListener('DOMContentLoaded',reload);
+
+function reload(){
+            axios.get('http://localhost:3000/orders').then((res)=>{
+                console.log(res,'61');
+                for(var j=0;j<res.data.length;j++)
+            {
+                var order=res.data[j].products;
+                var orderRow=document.createElement('div');
+               orderRow.classList.add('order');
+               var section=document.getElementsByClassName('order-container')[0];
+                 section.append(orderRow);
+               orderRow.innerHTML=`<h1>Order ID:${res.data[j].id}</h1><br> `
+               var cartItems=document.getElementsByClassName('cart-items')[0];
+                orderRow.append(cartItems);
+                var total=0;
+                for(var i=0;i<order.length;i++)
+             {
+
+                total=total+order[i].price*order[i].orderItem.quantity;
+                console.log(total);
+     var cartRow=document.createElement('div');
+console.log(order[i].orderItem.quantity,'78')
+     cartRow.classList.add('cart-row');
+     var cartRowContent=` <div class="cart-item cart-column">
+     <img class="cart-item-image" src=${order[i].imageUrl} width="100" height="100">
+     <span class="cart-item-title">${order[i].title}</span>
+   </div>
+   <span class="cart-price cart-column">$${order[i].price}</span>
+   <div class="cart-quantity cart-column">
+     <input class="cart-quantity-input" type="text" value=${order[i].orderItem.quantity}>
+   </div>
+  
+   </div><br>`
+
+     cartRow.innerHTML=cartRowContent;
+     orderRow.append(cartRow);
+   //  cartRow.getElementsByClassName('cart-quantity-input')[0].addEventListener('change',quantityChanged)
+    } 
+   
+    var ordervalue=document.createElement('div');
+    ordervalue.classList.add('total')
+    ordervalue.innerHTML=`Order Value:$ ${total}<br><br>`
+    orderRow.append(ordervalue);
+   
+}   
+
+  }) 
+  .catch(err=>console.log(err));
+
+  
+// function quantityChanged(event){
+//     var input=event.target;
+//     if(isNaN(input.value) || input.value <=0){
+//         input.value=1
+//     }
+//     updateCartTotal()
+// }
+
+
+//   function updateCartTotal()
+//   {
+//   var cartItemContainer=document.getElementsByClassName('cart-items')[0]
+
+//   var cartRows=cartItemContainer.getElementsByClassName('cart-row')
+//    var total=0;
+//   for(var i=0;i<cartRows.length;i++)
+//   {
+//     var cartRow=cartRows[i];
+//     var priceElement=cartRow.getElementsByClassName('cart-price')[0]
+//     var quantityElement=cartRow.getElementsByClassName('cart-quantity-input')[0];
+//     var price=parseFloat(priceElement.innerText.replace('$',''));
+//     var quantity=quantityElement.value;
+//     total=total+(price*quantity);
+//   }
+//   return total=Math.round(total*100)/100;
+//   document.getElementsByClassName('cart-total-price')[0].innerText=`$${total}`;
+// }
+        }
+    </script>
+    </body>
+    </html>
